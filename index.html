@@ -45,17 +45,23 @@
 			return cells.some((cell) => !Boolean(cell));
 		}
 
+		const isGameFieldEmpty = (cells) => {
+			return cells.every((cell) => !Boolean(cell));
+		}
+
 		function App() {
 			const [cells, setSells] = React.useState([null, null, null, null, null, null, null, null, null]);
 			const [currentStep, setCurrentStep] = React.useState(SYMBOL_X);
 			const [winnerSequence, setWinnerSequence] = React.useState();
 			const [isDraw, setIsDraw] = React.useState(false);
+			const [isGameStarted, setIsGameStarted] = React.useState(false);
 
 			const getSymbolClassName = (symbol) => {
 				if (symbol === SYMBOL_O) return 'symbol--o';
 				if (symbol === SYMBOL_X) return 'symbol--x';
 				return '';
 			}
+			const swapCurrentStep = (currentStep) => currentStep === SYMBOL_X ? setCurrentStep(SYMBOL_O) : setCurrentStep(SYMBOL_X);
 
 			const renderSymbol = (symbol) => <span className={`symbol ${getSymbolClassName(symbol)}`}>{symbol}</span>
 
@@ -71,7 +77,8 @@
 
 				setIsDraw(!hasEmptyCells(cellsCopy) && !winner);
 
-				setCurrentStep(currentStep === SYMBOL_X ? SYMBOL_O : SYMBOL_X);
+				swapCurrentStep(currentStep);
+				setIsGameStarted(true);
 				setWinnerSequence(winner);
 			}
 
@@ -80,6 +87,13 @@
 				setWinnerSequence();
 				setCurrentStep(SYMBOL_X);
 				setIsDraw(false);
+				setIsGameStarted(false);
+			}
+
+			const handleSwapClick = () => {
+				if (!isGameStarted) {
+					swapCurrentStep(currentStep);
+				}
 			}
 
 			const winnerSymbol = winnerSequence ? cells[winnerSequence[0]] : undefined;
@@ -117,9 +131,19 @@
 						})}
 					</div>
 
-					<button className="game-clear" onClick={handleClearClick}>
-						Clear
-					</button>
+					<div className="game-controls">
+						<button className="game-control" onClick={handleClearClick}>
+							Clear
+						</button>
+
+						<button
+							className="game-control"
+							disabled={isGameStarted}
+							onClick={handleSwapClick}
+						>
+							Swap
+						</button>
+					</div>
 				</div>
 			)
 		}
@@ -174,8 +198,21 @@
 			background-color: darksalmon;
 		}
 
-		.game-clear {
-			margin: 20px auto;
+		.game-controls {
+			display: flex;
+			gap: 20px;
+		}
+
+		.game-control {
+			opacity: 1;
+			pointer-events: auto;
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		.game-control:disabled {
+			opacity: 0.5;
+			pointer-events: none;
 		}
 	</style>
 </body>
