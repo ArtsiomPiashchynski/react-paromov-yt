@@ -41,10 +41,15 @@
 			}
 		}
 
+		const hasEmptyCells = (cells) => {
+			return cells.some((cell) => !Boolean(cell));
+		}
+
 		function App() {
 			const [cells, setSells] = React.useState([null, null, null, null, null, null, null, null, null]);
 			const [currentStep, setCurrentStep] = React.useState(SYMBOL_X);
 			const [winnerSequence, setWinnerSequence] = React.useState();
+			const [isDraw, setIsDraw] = React.useState(false);
 
 			const getSymbolClassName = (symbol) => {
 				if (symbol === SYMBOL_O) return 'symbol--o';
@@ -63,6 +68,9 @@
 				const winner = computeWinner(cellsCopy);
 
 				setSells(cellsCopy);
+
+				setIsDraw(!hasEmptyCells(cellsCopy) && !winner);
+
 				setCurrentStep(currentStep === SYMBOL_X ? SYMBOL_O : SYMBOL_X);
 				setWinnerSequence(winner);
 			}
@@ -71,14 +79,26 @@
 				setSells([null, null, null, null, null, null, null, null, null]);
 				setWinnerSequence();
 				setCurrentStep(SYMBOL_X);
+				setIsDraw(false);
 			}
 
 			const winnerSymbol = winnerSequence ? cells[winnerSequence[0]] : undefined;
+			const renderGameInfo = () => {
+				if (isDraw) {
+					return <p>DRAW</p>;
+				} else {
+					return (
+						winnerSequence
+							? <p>WINNER: {renderSymbol(winnerSymbol ?? currentStep)}</p>
+							: <p>Turn: {renderSymbol(winnerSymbol ?? currentStep)}</p>
+					);
+				}
+			}
 
 			return (
 				<div className="game">
 					<div className="game-info">
-						{winnerSequence ? 'WINNER:': 'Turn:'} {renderSymbol(winnerSymbol ?? currentStep)}
+						{renderGameInfo()}
 					</div>
 
 					<div className="game-field">
@@ -138,10 +158,6 @@
 			border: 1px solid black;
 		}
 
-		.cell--win {
-			background-color: darksalmon;
-		}
-
 		.symbol {
 
 		}
@@ -152,6 +168,10 @@
 
 		.symbol--x {
 			color: red;
+		}
+
+		.cell--win {
+			background-color: darksalmon;
 		}
 
 		.game-clear {
