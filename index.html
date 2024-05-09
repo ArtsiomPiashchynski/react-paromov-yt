@@ -82,8 +82,8 @@
 				setWinnerSequence(winner);
 			}
 
-			const handleClearClick = () => {
-				setSells([null, null, null, null, null, null, null, null, null]);
+			const handleResetClick = () => {
+				setSells(Array.from({length: 9}, () => null));
 				setWinnerSequence();
 				setCurrentStep(SYMBOL_X);
 				setIsDraw(false);
@@ -132,8 +132,8 @@
 					</div>
 
 					<div className="game-controls">
-						<button className="game-control" onClick={handleClearClick}>
-							Clear
+						<button className="game-control" onClick={handleResetClick}>
+							Reset
 						</button>
 
 						<button
