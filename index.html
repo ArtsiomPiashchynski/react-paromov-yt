@@ -56,14 +56,7 @@
 			const [isDraw, setIsDraw] = React.useState(false);
 			const [isGameStarted, setIsGameStarted] = React.useState(false);
 
-			const getSymbolClassName = (symbol) => {
-				if (symbol === SYMBOL_O) return 'symbol--o';
-				if (symbol === SYMBOL_X) return 'symbol--x';
-				return '';
-			}
 			const swapCurrentStep = (currentStep) => currentStep === SYMBOL_X ? setCurrentStep(SYMBOL_O) : setCurrentStep(SYMBOL_X);
-
-			const renderSymbol = (symbol) => <span className={`symbol ${getSymbolClassName(symbol)}`}>{symbol}</span>
 
 			const handleCellClick = (index) => {
 				if (cells[index] || winnerSequence) return;
@@ -97,38 +90,23 @@
 			}
 
 			const winnerSymbol = winnerSequence ? cells[winnerSequence[0]] : undefined;
-			const renderGameInfo = () => {
-				if (isDraw) {
-					return <p>DRAW</p>;
-				} else {
-					return (
-						winnerSequence
-							? <p>WINNER: {renderSymbol(winnerSymbol ?? currentStep)}</p>
-							: <p>Turn: {renderSymbol(winnerSymbol ?? currentStep)}</p>
-					);
-				}
-			}
 
 			return (
 				<div className="game">
-					<div className="game-info">
-						{renderGameInfo()}
-					</div>
+					<GameInfo
+						isDraw={isDraw}
+						winnerSymbol={winnerSymbol}
+						currentStep={currentStep}
+					/>
 
 					<div className="game-field">
-						{cells.map((symbol, index) => {
-							const isWinner = winnerSequence?.includes(index);
-
-							return (
-								<button
-									key={index}
-									className={`cell ${isWinner ? 'cell--win' : ''}`}
-									onClick={() => handleCellClick(index)}
-								>
-									{symbol ? renderSymbol(symbol) : null}
-								</button>
-							)
-						})}
+						{cells.map((symbol, index) =>
+							<GameSell
+								symbol={symbol}
+								isWinner={winnerSequence?.includes(index)}
+								onClick={() => handleCellClick(index)}
+							/>
+						)}
 					</div>
 
 					<div className="game-controls">
@@ -145,6 +123,55 @@
 						</button>
 					</div>
 				</div>
+			)
+		}
+
+		function GameSymbol({symbol}) {
+			const getSymbolClassName = (symbol) => {
+				if (symbol === SYMBOL_O) return 'symbol--o';
+				if (symbol === SYMBOL_X) return 'symbol--x';
+				return '';
+			}
+
+			return (
+				<span className={`symbol ${getSymbolClassName(symbol)}`}>
+					{symbol}
+				</span>
+			);
+		}
+
+		function GameInfo({isDraw, winnerSymbol, currentStep}) {
+			if (isDraw) {
+				return (
+					<div className="game-info">
+						DRAW
+					</div>
+				);
+			}
+
+			if (winnerSymbol) {
+				return (
+					<div className="game-info">
+						WINNER: <GameSymbol symbol={winnerSymbol ?? currentStep}/>
+					</div>
+				);
+			}
+
+			return (
+				<div className="game-info">
+					Turn: <GameSymbol symbol={winnerSymbol ?? currentStep}/>
+				</div>
+			);
+		}
+
+		function GameSell({ isWinner, onClick, symbol }) {
+			return (
+				<button
+					className={`cell ${isWinner ? 'cell--win' : ''}`}
+					onClick={onClick}
+				>
+					{symbol ? <GameSymbol symbol={symbol}/> : null}
+				</button>
 			)
 		}
 
