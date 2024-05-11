@@ -45,11 +45,7 @@
 			return cells.some((cell) => !Boolean(cell));
 		}
 
-		const isGameFieldEmpty = (cells) => {
-			return cells.every((cell) => !Boolean(cell));
-		}
-
-		function App() {
+		function useGameState () {
 			const [cells, setSells] = React.useState([null, null, null, null, null, null, null, null, null]);
 			const [currentStep, setCurrentStep] = React.useState(SYMBOL_X);
 			const [winnerSequence, setWinnerSequence] = React.useState();
@@ -65,7 +61,6 @@
 				cellsCopy[index] = currentStep;
 
 				const winner = computeWinner(cellsCopy);
-
 				setSells(cellsCopy);
 
 				setIsDraw(!hasEmptyCells(cellsCopy) && !winner);
@@ -90,6 +85,32 @@
 			}
 
 			const winnerSymbol = winnerSequence ? cells[winnerSequence[0]] : undefined;
+
+			return {
+				cells,
+				currentStep,
+				winnerSequence,
+				winnerSymbol,
+				isDraw,
+				isGameStarted,
+				handleSwapClick,
+				handleCellClick,
+				handleResetClick
+			}
+		}
+
+		function App() {
+			const {
+				cells,
+				currentStep,
+				winnerSequence,
+				winnerSymbol,
+				isDraw,
+				isGameStarted,
+				handleSwapClick,
+				handleCellClick,
+				handleResetClick
+			} = useGameState();
 
 			return (
 				<div className="game">
@@ -164,9 +185,10 @@
 			);
 		}
 
-		function GameSell({ isWinner, onClick, symbol }) {
+		function GameSell({ isWinner, onClick, symbol, index }) {
 			return (
 				<button
+					key={index}
 					className={`cell ${isWinner ? 'cell--win' : ''}`}
 					onClick={onClick}
 				>
