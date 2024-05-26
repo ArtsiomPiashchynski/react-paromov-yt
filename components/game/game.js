@@ -1,7 +1,7 @@
-import styles from "./game.module.css";
-import { GameInfo } from "./game-info";
-import { GameSell } from "./game-sell";
-import { useGameState } from "./use-game-state";
+import styles from './game.module.css';
+import { GameInfo } from './game-info';
+import { GameSell } from './game-sell';
+import { useGameState } from './use-game-state';
 
 export function Game() {
   const {
@@ -13,35 +13,35 @@ export function Game() {
     isGameStarted,
     handleSwapClick,
     handleCellClick,
-    handleResetClick
+    handleResetClick,
   } = useGameState();
 
   return (
-    <div className={styles["game"]}>
+    <div className={styles['game']}>
       <GameInfo
         isDraw={isDraw}
         winnerSymbol={winnerSymbol}
         currentStep={currentStep}
       />
 
-      <div className={styles["game-field"]}>
-        {cells.map((symbol, index) =>
+      <div className={styles['game-field']}>
+        {cells.map((symbol, index) => (
           <GameSell
             key={index}
             symbol={symbol}
             isWinner={winnerSequence?.includes(index)}
             onClick={() => handleCellClick(index)}
           />
-        )}
+        ))}
       </div>
 
-      <div className={styles["game-controls"]}>
-        <button className={styles["game-control"]} onClick={handleResetClick}>
+      <div className={styles['game-controls']}>
+        <button className={styles['game-control']} onClick={handleResetClick}>
           Reset
         </button>
 
         <button
-          className={styles["game-control"]}
+          className={styles['game-control']}
           disabled={isGameStarted}
           onClick={handleSwapClick}
         >
@@ -49,5 +49,5 @@ export function Game() {
         </button>
       </div>
     </div>
-  )
+  );
 }

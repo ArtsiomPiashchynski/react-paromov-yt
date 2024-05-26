@@ -1,0 +1,20 @@
+# Ignore folders and files
+node_modules
+.next
+.husky
+
+# Ignore files
+coverage
+.prettierignore
+.stylelintignore
+.eslintignore
+
+# Other files:
+*.otf
+*.png
+*.jpg
+*.woff
+*.woff2
+*.ttf
+*.json
+*.eot

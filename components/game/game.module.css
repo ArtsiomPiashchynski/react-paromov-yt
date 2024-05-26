@@ -1,12 +1,12 @@
 .game {
-  font-family: Arial, Helvetica, sans-serif;
+  align-items: center;
+  border: 1px solid black;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 150px;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 100px auto;
   padding: 20px;
-  border: 1px solid black;
+  width: 150px;
 }
 
 .game-info {
@@ -20,12 +20,12 @@
 }
 
 .cell {
-  margin: -1px 0 0 -1px;
-  display: flex;
   align-items: center;
-  justify-content: center;
   background-color: transparent;
   border: 1px solid gray;
+  display: flex;
+  justify-content: center;
+  margin: -1px 0 0 -1px;
 }
 
 .symbol {
@@ -42,7 +42,7 @@
 }
 
 .cell--win {
-  background-color: rgba(255, 0, 0, 0.1);
+  background-color: rgb(255 0 0 / 10%);
 }
 
 .game-controls {
@@ -51,10 +51,10 @@
 }
 
 .game-control {
+  margin-bottom: 20px;
+  margin-top: 20px;
   opacity: 1;
   pointer-events: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .game-control:disabled {
